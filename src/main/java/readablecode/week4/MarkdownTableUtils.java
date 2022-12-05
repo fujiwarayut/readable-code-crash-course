@@ -35,6 +35,7 @@ public class MarkdownTableUtils {
 	 * @throws IllegalArgumentException if headerRowCaptions is empty
 	 * @throws IllegalArgumentException if emptyRowCount is less than 1
 	 */
+	
 	public static String createEmptyTable(List<String> headerRowCaptions, int emptyRowCount) {
 		// validate args
 		Objects.requireNonNull(headerRowCaptions, "headerCaptions must not be null");
@@ -56,42 +57,34 @@ public class MarkdownTableUtils {
 	private static String createEmptyRows(List<String> headerRowCaptions, int emptyRowCount) {
 		StringBuilder markdownTable = new StringBuilder();
 		for (int i = 0; i < emptyRowCount; i++) {
-			for (String e : headerRowCaptions) {
-				markdownTable.append("|");
-				markdownTable.append(Strings.repeat(" ", e.length()));
-			}
-			markdownTable.append("|");
-			markdownTable.append(System.lineSeparator());
+			markdownTable.append(createRowRpeate(headerRowCaptions, " "));
 		}
 		return markdownTable.toString();
 	}
 
 	private static String createHeaderRow(List<String> headerRowCaptions) {
-		StringBuilder markdownTable = new StringBuilder();
-		for (String e : headerRowCaptions) {
-			markdownTable.append("|");
-			markdownTable.append(e);
-		}
-		markdownTable.append("|");
-		markdownTable.append(System.lineSeparator());
-		return markdownTable.toString();
+		return createRow(headerRowCaptions);
 	}
 
 	private static String createSeparatorRow(List<String> headerRowCaptions) {
+		return createRowRpeate(headerRowCaptions, "-");
+	}
+	
+	
+	private static String createRow(List<String> captions) {
+		return "|" + String.join("|", captions) + "|" + System.lineSeparator();
+	}
+	
+	private static String createRowRpeate(List<String> headerRowCaptions, String repeateChar) {
 		StringBuilder markdownTable = new StringBuilder();
 		for (String e : headerRowCaptions) {
 			markdownTable.append("|");
-			markdownTable.append(Strings.repeat("-", e.length()));
+			markdownTable.append(Strings.repeat(repeateChar, e.length()));
 
 		}
 		markdownTable.append("|");
 		markdownTable.append(System.lineSeparator());
-
 		return markdownTable.toString();
-	}
-
-	private static String createRow(List<String> captions) {
-		return "|" + String.join("|", captions) + "|" + System.lineSeparator();
 	}
 
 }

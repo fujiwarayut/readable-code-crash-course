@@ -7,6 +7,10 @@ import com.google.common.base.Strings;
 
 public class MarkdownTableUtils {
 
+	private static final String PIPE = "|";
+	private static final String HYPHEN = "-";
+	private static final String SPACE = " ";
+
 	// TODO1 : find more duplicated codes and extract them and refactor them.
 	//
 	// hint1. logic of creating separator row and empty row are same except " " or
@@ -26,8 +30,8 @@ public class MarkdownTableUtils {
 	 * Returns the string of table which has empty rows as Markdown table syntax.
 	 * length of captions for separator cell and empty cell is same with their
 	 * header captions
-	 * 
-	 * 
+	 *
+	 *
 	 * @param headerRowCaptions the captions for header row
 	 * @param emptyRowCount     the number of empty rows.
 	 * @return the string of table which has empty rows as Markdown table
@@ -35,6 +39,7 @@ public class MarkdownTableUtils {
 	 * @throws IllegalArgumentException if headerRowCaptions is empty
 	 * @throws IllegalArgumentException if emptyRowCount is less than 1
 	 */
+
 	public static String createEmptyTable(List<String> headerRowCaptions, int emptyRowCount) {
 		// validate args
 		Objects.requireNonNull(headerRowCaptions, "headerCaptions must not be null");
@@ -56,42 +61,34 @@ public class MarkdownTableUtils {
 	private static String createEmptyRows(List<String> headerRowCaptions, int emptyRowCount) {
 		StringBuilder markdownTable = new StringBuilder();
 		for (int i = 0; i < emptyRowCount; i++) {
-			for (String e : headerRowCaptions) {
-				markdownTable.append("|");
-				markdownTable.append(Strings.repeat(" ", e.length()));
-			}
-			markdownTable.append("|");
-			markdownTable.append(System.lineSeparator());
+			markdownTable.append(createRowRpeat(headerRowCaptions, SPACE));
 		}
 		return markdownTable.toString();
 	}
 
 	private static String createHeaderRow(List<String> headerRowCaptions) {
-		StringBuilder markdownTable = new StringBuilder();
-		for (String e : headerRowCaptions) {
-			markdownTable.append("|");
-			markdownTable.append(e);
-		}
-		markdownTable.append("|");
-		markdownTable.append(System.lineSeparator());
-		return markdownTable.toString();
+		return createRow(headerRowCaptions);
 	}
 
 	private static String createSeparatorRow(List<String> headerRowCaptions) {
-		StringBuilder markdownTable = new StringBuilder();
-		for (String e : headerRowCaptions) {
-			markdownTable.append("|");
-			markdownTable.append(Strings.repeat("-", e.length()));
-
-		}
-		markdownTable.append("|");
-		markdownTable.append(System.lineSeparator());
-
-		return markdownTable.toString();
+		return createRowRpeat(headerRowCaptions, HYPHEN);
 	}
 
+
 	private static String createRow(List<String> captions) {
-		return "|" + String.join("|", captions) + "|" + System.lineSeparator();
+		return PIPE + String.join(PIPE, captions) + PIPE + System.lineSeparator();
+	}
+
+	private static String createRowRpeat(List<String> headerRowCaptions, String repeateChar) {
+		StringBuilder markdownTable = new StringBuilder();
+		for (String captionString : headerRowCaptions) {
+			markdownTable.append(PIPE);
+			markdownTable.append(Strings.repeat(repeateChar, captionString.length()));
+
+		}
+		markdownTable.append(PIPE);
+		markdownTable.append(System.lineSeparator());
+		return markdownTable.toString();
 	}
 
 }
